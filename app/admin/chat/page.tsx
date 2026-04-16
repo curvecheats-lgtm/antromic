@@ -3,36 +3,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { chatApi, type ChatMessage } from '@/lib/api';
+import { ROLES, type RoleKey } from '@/lib/roles';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Send, RefreshCw, Shield, Rocket, Video, Award, Trash2 } from 'lucide-react';
+import { Send, RefreshCw, Shield, Trash2 } from 'lucide-react';
 
-// Role badge configuration
-const ROLE_BADGES: Record<string, { icon: React.ElementType; color: string; label: string }> = {
-  owner: { icon: Shield, color: 'text-red-500', label: 'Owner' },
-  admin: { icon: Shield, color: 'text-red-500', label: 'Admin' },
-  booster: { icon: Rocket, color: 'text-purple-500', label: 'Booster' },
-  media: { icon: Video, color: 'text-pink-500', label: 'Media' },
-  og: { icon: Award, color: 'text-green-500', label: 'OG' },
-};
-
-// Mock user roles for demonstration (in production this would come from the API)
-const USER_ROLES: Record<string, string> = {
-  'koni': 'owner',
-  'weird': 'owner',
-};
-
-function RoleBadge({ role }: { role: string }) {
-  const badge = ROLE_BADGES[role];
-  if (!badge) return null;
-  
-  const Icon = badge.icon;
-  return (
-    <span className={`inline-flex items-center ${badge.color}`} title={badge.label}>
-      <Icon className="w-3 h-3" />
-    </span>
-  );
+function normalizeRole(role?: string): RoleKey {
+  if (!role) return 'user';
+  return role in ROLES ? (role as RoleKey) : 'user';
 }
 
 export default function AdminChatPage() {
@@ -68,11 +47,11 @@ export default function AdminChatPage() {
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || !token) return;
+    if (!newMessage.trim() || !adminSession) return;
 
     setSending(true);
     try {
-      const result = await chatApi.send(token, newMessage.trim());
+      const result = await chatApi.sendAsAdmin(adminSession.username, adminSession.adminKey, newMessage.trim());
       if (result.success) {
         setNewMessage('');
         fetchMessages();
@@ -93,10 +72,6 @@ export default function AdminChatPage() {
       hour: '2-digit',
       minute: '2-digit',
     });
-  };
-
-  const getUserRole = (username: string): string | null => {
-    return USER_ROLES[username.toLowerCase()] || null;
   };
 
   return (
@@ -128,8 +103,10 @@ export default function AdminChatPage() {
             </div>
           ) : (
             messages.map((msg) => {
-              const role = getUserRole(msg.username);
               const isCurrentUser = msg.username === adminSession?.username;
+              const roleConfig = ROLES[normalizeRole(msg.role || (isCurrentUser ? adminSession?.role : undefined))];
+              const RoleIcon = roleConfig.icon;
+              const roleTextColor = roleConfig.color.split(' ')[1] || 'text-foreground';
               
               return (
                 <div
@@ -137,18 +114,19 @@ export default function AdminChatPage() {
                   className={`flex flex-col ${isCurrentUser ? 'items-end' : 'items-start'}`}
                 >
                   <div
-                    className={`max-w-[70%] rounded-lg p-3 relative group ${
+                    className={`max-w-[70%] rounded-lg border p-3 relative group ${
                       isCurrentUser
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-secondary text-secondary-foreground'
+                        ? 'bg-card text-card-foreground border-primary/30'
+                        : 'bg-card text-card-foreground border-border'
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      {role && <RoleBadge role={role} />}
-                      <span className="text-xs font-semibold opacity-80">
+                      {!isCurrentUser && <RoleIcon className={`w-3.5 h-3.5 ${roleTextColor}`} title={roleConfig.label} />}
+                      <span className="text-xs font-semibold opacity-85">
                         {msg.username}
                       </span>
-                      <span className="text-xs opacity-60">
+                      {isCurrentUser && <RoleIcon className={`w-3.5 h-3.5 ${roleTextColor}`} title={roleConfig.label} />}
+                      <span className="text-xs text-muted-foreground opacity-70">
                         {formatTime(msg.timestamp)}
                       </span>
                       <button
@@ -179,7 +157,7 @@ export default function AdminChatPage() {
             />
             <Button
               type="submit"
-              disabled={sending || !newMessage.trim()}
+              disabled={sending || !newMessage.trim() || !adminSession}
               className="bg-primary hover:bg-primary/90"
             >
               <Send className="w-4 h-4" />

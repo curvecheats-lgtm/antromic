@@ -243,7 +243,14 @@ export default function LoadersPage() {
                       className="bg-primary hover:bg-primary/90"
                       onClick={() => {
                         if (currentLoader.downloadUrl) {
-                          window.open(currentLoader.downloadUrl, '_blank');
+                          // Create a temporary link to force download
+                          const link = document.createElement('a');
+                          link.href = currentLoader.downloadUrl;
+                          link.download = currentLoader.downloadUrl.split('/').pop() || 'loader.exe';
+                          link.target = '_blank';
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
                         } else {
                           toast.info('Download available in Discord - check Support page');
                         }
@@ -297,12 +304,19 @@ export default function LoadersPage() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Button 
+                          <Button
                             variant="outline" 
                             size="sm"
                             onClick={() => {
                               if (loader.downloadUrl) {
-                                window.open(loader.downloadUrl, '_blank');
+                                // Create a temporary link to force download
+                                const link = document.createElement('a');
+                                link.href = loader.downloadUrl;
+                                link.download = loader.downloadUrl.split('/').pop() || 'loader.exe';
+                                link.target = '_blank';
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
                               } else {
                                 toast.info('Download available in Discord');
                               }

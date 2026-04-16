@@ -16,12 +16,12 @@ export const metadata: Metadata = {
   title: 'Curve.cc - Premium Software',
   description: 'Premium software licensing and authentication system',
   icons: {
-    icon: '/images/logo.png',
+    icon: '/images/logo-mini.png',
   },
 }
 
 export const viewport: Viewport = {
-  themeColor: '#dc2626',
+  themeColor: '#3b82f6',
   width: 'device-width',
   initialScale: 1,
 }

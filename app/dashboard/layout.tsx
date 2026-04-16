@@ -99,14 +99,18 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
-      <aside className="w-64 bg-card border-r border-border flex flex-col fixed inset-y-0 left-0 z-30">
-        <div className="p-4 border-b border-border">
+      <aside className="w-56 bg-card border-r border-border flex flex-col fixed inset-y-0 left-0 z-30">
+        <div className="p-3 border-b border-border">
           <Link href="/dashboard" className="flex justify-center">
-            <Logo size="sm" className="hover:opacity-80 transition-opacity cursor-pointer" />
+            <img 
+              src="/images/logo-mini.png" 
+              alt="Curve.cc" 
+              className="w-20 h-12 object-contain hover:opacity-80 transition-opacity cursor-pointer"
+            />
           </Link>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+        <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
           {navItems.map((item) => {
             const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href));
             const unreadCount = item.href === '/dashboard/chat' ? unreadCounts.chat : 
@@ -115,7 +119,7 @@ export default function DashboardLayout({
               <Link key={item.href} href={item.href} className="block relative">
                 <Button 
                   variant="ghost" 
-                  className={`w-full justify-start gap-3 transition-all items-center h-10 ${
+                  className={`w-full justify-start gap-2 transition-all items-center h-9 ${
                     isActive 
                       ? 'bg-primary/20 text-primary border-l-2 border-primary rounded-l-none' 
                       : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
@@ -129,21 +133,21 @@ export default function DashboardLayout({
                       </span>
                     )}
                   </div>
-                  <span className="truncate self-center">{item.label}</span>
+                  <span className="truncate self-center text-sm">{item.label}</span>
                 </Button>
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-border">
-          <div className="mb-4 p-3 bg-secondary/50 rounded-lg">
-            <p className="text-xs text-muted-foreground">Logged in as</p>
-            <p className="font-semibold text-foreground truncate">{user.username}</p>
+        <div className="p-3 border-t border-border">
+          <div className="mb-3 p-2 bg-secondary/50 rounded-lg">
+            <p className="text-[11px] text-muted-foreground">Logged in as</p>
+            <p className="font-semibold text-foreground truncate text-sm">{user.username}</p>
           </div>
           <Button
             variant="ghost"
-            className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 h-10 items-center"
+            className="w-full justify-start gap-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 h-9 items-center text-sm"
             onClick={logout}
           >
             <LogOut className="w-4 h-4 flex-shrink-0 self-center" />
@@ -153,7 +157,7 @@ export default function DashboardLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 ml-64 overflow-auto">
+      <main className="flex-1 ml-56 overflow-auto">
         <div className={`transition-opacity duration-200 ${isPageLoading ? 'opacity-50' : 'opacity-100'}`}>
           {children}
         </div>

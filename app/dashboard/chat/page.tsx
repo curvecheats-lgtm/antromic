@@ -3,48 +3,18 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { chatApi, type ChatMessage } from '@/lib/api';
+import { ROLES, type RoleKey } from '@/lib/roles';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { Send, RefreshCw, Shield, Rocket, Video, Award, MessageSquare, Users } from 'lucide-react';
+import { Send, RefreshCw, MessageSquare, Users } from 'lucide-react';
 
-// Role badge configuration
-const ROLE_BADGES: Record<string, { icon: React.ElementType; color: string; bgColor: string; label: string }> = {
-  owner: { icon: Shield, color: 'text-red-500', bgColor: 'bg-red-500/20', label: 'Owner' },
-  admin: { icon: Shield, color: 'text-red-500', bgColor: 'bg-red-500/20', label: 'Admin' },
-  booster: { icon: Rocket, color: 'text-purple-500', bgColor: 'bg-purple-500/20', label: 'Booster' },
-  media: { icon: Video, color: 'text-pink-500', bgColor: 'bg-pink-500/20', label: 'Media' },
-  og: { icon: Award, color: 'text-green-500', bgColor: 'bg-green-500/20', label: 'OG' },
-};
-
-// User roles - get from localStorage or default to 'user'
-const getUserRole = (username: string): string => {
-  // Check localStorage for role
-  const storedRole = localStorage.getItem('user_role');
-  if (storedRole) return storedRole;
-  
-  // Hardcoded for specific users (fallback)
-  const USER_ROLES: Record<string, string> = {
-    'koni': 'owner',
-    'weird': 'owner',
-    'weirdposer': 'owner',
-  };
-  return USER_ROLES[username.toLowerCase()] || 'user';
-};
-
-function RoleBadge({ role }: { role: string }) {
-  const badge = ROLE_BADGES[role];
-  if (!badge) return null;
-  
-  const Icon = badge.icon;
-  return (
-    <span className={`inline-flex items-center justify-center gap-1 px-1.5 py-0.5 rounded ${badge.bgColor} ${badge.color}`} title={badge.label}>
-      <Icon className="w-3 h-3 flex-shrink-0 self-center" />
-      <span className="text-xs font-medium leading-none">{badge.label}</span>
-    </span>
-  );
+function normalizeRole(role?: string): RoleKey {
+  if (!role) return 'user';
+  return role in ROLES ? (role as RoleKey) : 'user';
 }
+
 
 export default function ChatPage() {
   const { user, token, adminSession } = useAuth();
@@ -58,7 +28,8 @@ export default function ChatPage() {
   
   // Use user token or admin key for auth
   const authToken = token || adminSession?.adminKey || null;
-  const username = user?.username || adminSession?.username || 'Unknown';
+  const currentUsername = user?.username || adminSession?.username || 'Unknown';
+  const currentRole = normalizeRole(user?.role || adminSession?.role);
 
   const fetchMessages = useCallback(async () => {
     try {
@@ -100,7 +71,9 @@ export default function ChatPage() {
 
     setSending(true);
     try {
-      const result = await chatApi.send(authToken, newMessage.trim());
+      const result = adminSession
+        ? await chatApi.sendAsAdmin(adminSession.username, adminSession.adminKey, newMessage.trim())
+        : await chatApi.send(authToken, newMessage.trim());
       if (result.success) {
         setNewMessage('');
         setAutoScroll(true);
@@ -197,28 +170,34 @@ export default function ChatPage() {
                 </div>
                 <div className="space-y-3">
                   {dateMessages.map((msg) => {
-                    const isOwn = msg.username === user?.username;
+                    const isOwn = msg.username === currentUsername;
+                    const messageRole = normalizeRole(msg.role || (isOwn ? currentRole : undefined));
+                    const roleConfig = ROLES[messageRole];
+                    const RoleIcon = roleConfig.icon;
+                    const roleTextColor = roleConfig.color.split(' ')[1] || 'text-foreground';
                     return (
                       <div
                         key={msg.id}
                         className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
                       >
                         <div
-                          className={`max-w-[75%] rounded-2xl px-4 py-2 ${
+                          className={`max-w-[75%] rounded-2xl border px-4 py-2 ${
                             isOwn
-                              ? 'bg-primary text-primary-foreground rounded-br-md'
-                              : 'bg-secondary text-secondary-foreground rounded-bl-md'
+                              ? 'bg-card text-card-foreground border-primary/30 rounded-br-md'
+                              : 'bg-card text-card-foreground border-border rounded-bl-md'
                           }`}
                         >
-                          <div className={`flex items-center gap-2 mb-1 flex-wrap ${isOwn ? 'justify-end' : 'justify-start'}`}>
-                            {(() => {
-                              const userRole = getUserRole(msg.username);
-                              return userRole !== 'user' ? <RoleBadge role={userRole} /> : null;
-                            })()}
-                            <span className={`text-xs font-semibold ${isOwn ? 'opacity-90' : 'opacity-80'}`}>
+                          <div className={`mb-1 flex items-center gap-2 ${isOwn ? 'justify-end' : 'justify-start'}`}>
+                            {!isOwn && (
+                              <RoleIcon className={`w-3.5 h-3.5 ${roleTextColor} flex-shrink-0`} title={roleConfig.label} />
+                            )}
+                            <span className={`text-xs font-semibold whitespace-nowrap ${isOwn ? 'opacity-90' : 'opacity-85'}`}>
                               {msg.username}
                             </span>
-                            <span className={`text-xs ${isOwn ? 'opacity-70' : 'opacity-50'}`}>
+                            {isOwn && (
+                              <RoleIcon className={`w-3.5 h-3.5 ${roleTextColor} flex-shrink-0`} title={roleConfig.label} />
+                            )}
+                            <span className={`text-xs whitespace-nowrap text-muted-foreground ${isOwn ? 'opacity-80' : 'opacity-65'}`}>
                               {formatTime(msg.timestamp)}
                             </span>
                           </div>

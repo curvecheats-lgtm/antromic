@@ -17,13 +17,7 @@ import {
   CheckCircle2,
   Edit3,
   Lock,
-  Palette,
-  Trophy,
-  Image as ImageIcon,
-  Code,
-  Sparkles,
-  MessageSquare,
-  Share2
+  Sparkles
 } from 'lucide-react';
 import { ROLES, BADGES, USERNAME_COLORS, RESERVED_USERNAMES, type RoleKey, type BadgeKey } from '@/lib/roles';
 
@@ -34,15 +28,17 @@ interface UserProfile {
   links: string[];
   embeds: { title: string; url: string; image?: string }[];
   role: RoleKey;
-  joinedAt: number;
-  key: string | null;
-  keyExpiry: number | null;
-  usernameColor: string;
-  unlockedBadges: BadgeKey[];
-  stats: {
-    messages: number;
-    configs: number;
+  badges: BadgeKey[];
+  joinedAt: string;
+  profilePicture?: string;
+  banner?: string;
+  unlockedBadges?: BadgeKey[];
+  stats?: {
+    messages?: number;
+    configs?: number;
   };
+  key?: string;
+  keyExpiry?: string;
 }
 
 export default function ProfilePage() {
@@ -57,8 +53,8 @@ export default function ProfilePage() {
   const [bio, setBio] = useState('');
   const [links, setLinks] = useState<string[]>(['']);
   const [embeds, setEmbeds] = useState<{ title: string; url: string; image?: string }[]>([]);
-  const [usernameColor, setUsernameColor] = useState('text-foreground');
   const [error, setError] = useState('');
+  const [selectedBadges, setSelectedBadges] = useState<BadgeKey[]>([]);
 
   useEffect(() => {
     fetchProfile();
@@ -68,9 +64,8 @@ export default function ProfilePage() {
     if (!token) return;
     setLoading(true);
     try {
-      // Mock profile for now - will be replaced with API call
-      // Get role from local storage or default to 'user'
-      const storedRole = localStorage.getItem('user_role') || 'user';
+      // Get role from user object or default to 'user'
+      const userRole = user?.role || 'user';
       
       const mockProfile: UserProfile = {
         username: user?.username || '',
@@ -78,11 +73,11 @@ export default function ProfilePage() {
         bio: '',
         links: [],
         embeds: [],
-        role: storedRole as RoleKey,
-        joinedAt: Date.now() - 30 * 24 * 60 * 60 * 1000,
-        key: user?.key || null,
-        keyExpiry: null,
-        usernameColor: 'text-foreground',
+        role: userRole as RoleKey,
+        joinedAt: new Date(user?.createdAt || Date.now()).toISOString(),
+        key: user?.key,
+        keyExpiry: undefined,
+        badges: [],
         unlockedBadges: [],
         stats: { messages: 0, configs: 0 },
       };
@@ -91,7 +86,6 @@ export default function ProfilePage() {
       setBio(mockProfile.bio);
       setLinks(mockProfile.links.length > 0 ? mockProfile.links : ['']);
       setEmbeds(mockProfile.embeds);
-      setUsernameColor(mockProfile.usernameColor);
     } catch (error) {
       toast.error('Failed to load profile');
     }
@@ -156,6 +150,18 @@ export default function ProfilePage() {
       return;
     }
     
+    // Validate bio length
+    if (bio.length > roleConfig.maxBioLength) {
+      setError(`Bio exceeds maximum length of ${roleConfig.maxBioLength} characters`);
+      return;
+    }
+
+    // Validate links
+    if (links.length > roleConfig.maxLinks) {
+      setError(`Maximum ${roleConfig.maxLinks} links allowed for your role`);
+      return;
+    }
+
     setSaving(true);
     try {
       // Filter out empty links
@@ -170,7 +176,6 @@ export default function ProfilePage() {
         displayName: displayName || null,
         bio,
         links: validLinks,
-        usernameColor,
       });
       
       toast.success('Profile updated successfully!');
@@ -181,8 +186,9 @@ export default function ProfilePage() {
     setSaving(false);
   };
 
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString('en-US', {
+  const formatDate = (timestamp: number | string) => {
+    const date = typeof timestamp === 'string' ? new Date(timestamp) : new Date(timestamp);
+    return date.toLocaleDateString('en-US', {
       month: 'long',
       day: 'numeric',
       year: 'numeric',
@@ -217,29 +223,29 @@ export default function ProfilePage() {
   const canCustomize = roleConfig.canCustomizeProfile;
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
-          <User className="w-6 h-6 text-primary flex-shrink-0 self-center" />
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-foreground flex items-center gap-2">
+          <User className="w-5 h-5 text-primary flex-shrink-0 self-center" />
           <span>My Profile</span>
         </h1>
-        <p className="text-muted-foreground">Manage your profile and customization</p>
+        <p className="text-sm text-muted-foreground">Manage your profile and customization</p>
       </div>
 
       {/* Role Badge */}
-      <Card className="mb-6 bg-card border-border card-realistic">
-        <CardContent className="p-6">
-          <div className="flex items-start gap-4">
-            <div className={`w-16 h-16 rounded-full ${roleConfig.color.split(' ')[0]} flex items-center justify-center flex-shrink-0`}>
-              <RoleIcon className={`w-8 h-8 ${roleConfig.color.split(' ')[1]}`} />
+      <Card className="mb-4 bg-card border-border card-realistic">
+        <CardContent className="p-4">
+          <div className="flex items-start gap-3">
+            <div className={`w-12 h-12 rounded-full ${roleConfig.color.split(' ')[0]} flex items-center justify-center flex-shrink-0`}>
+              <RoleIcon className={`w-6 h-6 ${roleConfig.color.split(' ')[1]}`} />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1 flex-wrap">
-                <h2 className={`text-xl font-bold ${profile.usernameColor}`}>
+                <h2 className="text-lg font-bold text-foreground">
                   @{profile.username}
                 </h2>
-                <Badge variant="outline" className={`${roleConfig.color} border flex items-center gap-1`}>
+                <Badge variant="outline" className={`${roleConfig.color} border flex items-center gap-1 text-xs`}>
                   <RoleIcon className="w-3 h-3 flex-shrink-0" />
                   <span>{roleConfig.label}</span>
                 </Badge>
@@ -249,7 +255,7 @@ export default function ProfilePage() {
                   Display name: <span className="text-foreground font-medium">{profile.displayName}</span>
                 </p>
               )}
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-[11px] text-muted-foreground mt-1">
                 Joined {formatDate(profile.joinedAt)}
               </p>
             </div>
@@ -257,7 +263,7 @@ export default function ProfilePage() {
               <Button
                 variant="outline"
                 onClick={() => setIsEditing(!isEditing)}
-                className="shrink-0 h-10 items-center"
+                className="shrink-0 h-9 items-center text-sm"
               >
                 {isEditing ? (
                   <>
@@ -267,7 +273,7 @@ export default function ProfilePage() {
                 ) : (
                   <>
                     <Edit3 className="w-4 h-4 mr-2 flex-shrink-0 self-center" />
-                    <span className="self-center">Edit Profile</span>
+                    <span className="self-center">Edit</span>
                   </>
                 )}
               </Button>
@@ -275,15 +281,13 @@ export default function ProfilePage() {
           </div>
           
           {/* Role perks info */}
-          <div className="mt-4 p-3 bg-primary/10 border border-primary/30 rounded-lg">
+          <div className="mt-3 p-2.5 bg-primary/10 border border-primary/30 rounded-lg">
             <div className="flex items-center gap-2 text-primary">
-              <Sparkles className="w-4 h-4" />
-              <span className="text-sm font-medium">{roleConfig.label} Perks</span>
+              <Sparkles className="w-3.5 h-3.5" />
+              <span className="text-xs font-medium">{roleConfig.label} Perks</span>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {roleConfig.canChangeUsernameColor 
-                ? 'You can change your username color, add a bio, links, and unlock badges!' 
-                : 'You can add a bio and links. Upgrade to Booster/Media for username colors and badges!'}
+            <p className="text-[11px] text-muted-foreground mt-1">
+              You can add a bio and links to your profile!
             </p>
           </div>
         </CardContent>
@@ -381,36 +385,6 @@ export default function ProfilePage() {
               )}
             </div>
 
-            {/* Username Color - Booster/Media only */}
-            {roleConfig.canChangeUsernameColor && (
-              <div className="space-y-3">
-                <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <Palette className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                  Username Color Style
-                  <Badge variant="secondary" className="text-xs">Booster/Media Only</Badge>
-                </label>
-                <div className="grid grid-cols-6 gap-2">
-                  {USERNAME_COLORS.map((color) => (
-                    <button
-                      key={color.value}
-                      onClick={() => setUsernameColor(color.value)}
-                      className={`w-full aspect-square rounded-lg border-2 transition-all ${
-                        usernameColor === color.value 
-                          ? 'border-primary ring-2 ring-primary/30' 
-                          : 'border-border hover:border-primary/50'
-                      }`}
-                      title={color.name}
-                    >
-                      <div className={`w-full h-full rounded-md ${color.bg} opacity-80`} />
-                    </button>
-                  ))}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Selected: {USERNAME_COLORS.find(c => c.value === usernameColor)?.name || 'Default'}
-                </p>
-              </div>
-            )}
-
             {/* Save Button */}
             <div className="flex gap-3 pt-4 border-t border-border">
               <Button
@@ -494,62 +468,6 @@ export default function ProfilePage() {
                 {canCustomize ? 'No links added yet.' : 'No links available.'}
               </p>
             )}
-          </div>
-
-          {/* Badges & Stats Section */}
-          <div className="pt-4 border-t border-border">
-            <h4 className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
-              <Trophy className="w-4 h-4 text-primary" />
-              Badges & Achievements
-            </h4>
-            
-            {/* Unlocked Badges */}
-            {profile.unlockedBadges.length > 0 ? (
-              <div className="flex flex-wrap gap-2 mb-4">
-                {profile.unlockedBadges.map((badgeKey) => {
-                  const badge = BADGES[badgeKey];
-                  const BadgeIcon = badge.icon;
-                  return (
-                    <div
-                      key={badgeKey}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${badge.bgColor} ${badge.color} border border-opacity-30`}
-                      title={badge.description}
-                    >
-                      <BadgeIcon className="w-3.5 h-3.5" />
-                      <span className="text-sm font-medium">{badge.label}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className="text-sm text-muted-foreground italic mb-4">
-                No badges unlocked yet. Start chatting and sharing configs to earn badges!
-              </p>
-            )}
-
-            {/* Stats Progress */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-secondary/50 rounded-lg p-3">
-                <div className="flex items-center gap-2 mb-1">
-                  <MessageSquare className="w-4 h-4 text-blue-400" />
-                  <span className="text-xs text-muted-foreground">Messages</span>
-                </div>
-                <p className="text-lg font-semibold text-foreground">{profile.stats.messages}</p>
-                <p className="text-xs text-muted-foreground">
-                  {profile.stats.messages >= 100 ? '✓ Chatter badge earned!' : `${100 - profile.stats.messages} more for Chatter badge`}
-                </p>
-              </div>
-              <div className="bg-secondary/50 rounded-lg p-3">
-                <div className="flex items-center gap-2 mb-1">
-                  <Share2 className="w-4 h-4 text-green-400" />
-                  <span className="text-xs text-muted-foreground">Configs Shared</span>
-                </div>
-                <p className="text-lg font-semibold text-foreground">{profile.stats.configs}</p>
-                <p className="text-xs text-muted-foreground">
-                  {profile.stats.configs >= 5 ? '✓ Sharer badge earned!' : `${5 - profile.stats.configs} more for Sharer badge`}
-                </p>
-              </div>
-            </div>
           </div>
 
           {/* License Info */}

@@ -67,31 +67,35 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-background p-4 overflow-hidden">
+    <main className="min-h-screen bg-background p-4 overflow-hidden">
       <PixelRain />
-      
-      <Card className="w-full max-w-md relative z-10 glass border-border/50 shadow-2xl shadow-primary/20 animate-scale-in">
-        <CardContent className="p-8">
-          <div className="flex flex-col items-center mb-8">
-            <AnimatedLogo size="lg" className="mb-4" />
-            <p className="text-xs text-muted-foreground uppercase tracking-widest animate-fade-in">Premium Software</p>
-          </div>
+      <div className="max-w-md mx-auto relative z-10 px-4 py-8">
+        <Card className="glass border-border/50 animate-slide-up">
+          <CardContent className="p-8">
+            <div className="flex flex-col items-center mb-8">
+              <img 
+                src="/images/logo-full.png" 
+                alt="Curve.cc" 
+                className="mb-4 h-24 w-auto object-contain"
+              />
+              <p className="text-xs text-muted-foreground uppercase tracking-widest animate-fade-in">Premium Software</p>
+            </div>
 
-          {mode === 'login' && (
-            <form onSubmit={handleLogin} className="space-y-4 animate-slide-up">
-              <div className="space-y-2">
-                <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">
-                  Username
-                </label>
-                <Input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="bg-input/80 border-border/50 focus:border-primary h-11 transition-all focus:shadow-lg focus:shadow-primary/20"
-                  placeholder="Enter username"
-                  required
-                />
-              </div>
+            {mode === 'login' && (
+              <form onSubmit={handleLogin} className="space-y-4 animate-slide-up">
+                <div className="space-y-2">
+                  <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">
+                    Username
+                  </label>
+                  <Input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="bg-input/80 border-border/50 focus:border-primary h-11 transition-all focus:shadow-lg focus:shadow-primary/20"
+                    placeholder="Enter username"
+                    required
+                  />
+                </div>
 
               <div className="space-y-2">
                 <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">
@@ -263,6 +267,7 @@ export default function LoginPage() {
           </div>
         </CardContent>
       </Card>
+      </div>
     </main>
   );
 }

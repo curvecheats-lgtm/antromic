@@ -44,12 +44,12 @@ export function PixelRain() {
     const drawPixel = (x: number, y: number, size: number, brightness: number) => {
       // Draw sharp pixels instead of smooth gradients
       const alpha = brightness;
-      ctx.fillStyle = `rgba(220, 38, 38, ${alpha})`;
+      ctx.fillStyle = `rgba(59, 130, 246, ${alpha})`;
       ctx.fillRect(Math.floor(x), Math.floor(y), size, size);
       
       // Add glow effect for larger pixels
       if (size >= 4) {
-        ctx.fillStyle = `rgba(239, 68, 68, ${alpha * 0.5})`;
+        ctx.fillStyle = `rgba(96, 165, 250, ${alpha * 0.5})`;
         ctx.fillRect(Math.floor(x) - 1, Math.floor(y) - 1, size + 2, 1);
         ctx.fillRect(Math.floor(x) - 1, Math.floor(y) + size, size + 2, 1);
         ctx.fillRect(Math.floor(x) - 1, Math.floor(y), 1, size);

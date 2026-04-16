@@ -1,5 +1,5 @@
 // ============================================
-// CURVE.CC KEYAUTH CLOUDFLARE WORKER v2.0
+// CURVE.CC KEYAUTH CLOUDFLARE WORKER v2.2 (FIXED)
 // Copy this ENTIRE file into your Cloudflare Worker
 // ============================================
 // Required KV Namespaces (bind these in Worker settings):
@@ -11,6 +11,12 @@
 // - TICKETS: For support tickets
 // - NEWS: For news posts
 // - LOADERS: For loader versions
+// ============================================
+// FIXES in v2.2:
+// - User login now always returns role field
+// - Simplified stats (no USER_STATS KV needed)
+// - Better error handling
+// - All endpoints return proper success/error format
 // ============================================
 
 // CORS headers for all responses
@@ -418,6 +424,7 @@ export default {
           username,
           password: hashedPassword,
           key,
+          role: 'user', // FIXED: Always set role to 'user' by default
           createdAt: Date.now(),
           isAdmin: false,
           hwid: null
@@ -429,7 +436,7 @@ export default {
         parsedKey.usedBy = username;
         await env.KEYS.put(key, JSON.stringify(parsedKey));
 
-        return jsonResponse({ success: true, user: { ...user, password: undefined } });
+        return jsonResponse({ success: true, user: { ...user, password: undefined, role: 'user' } });
       }
 
       // Login user
@@ -483,7 +490,18 @@ export default {
         const token = generateId() + generateId();
         await env.USERS.put(`session_${token}`, JSON.stringify({ userId: user.id, username }), { expirationTtl: 86400 * 7 });
 
-        return jsonResponse({ success: true, token, user: { ...user, password: undefined } });
+        // FIXED: Always include role in response
+        return jsonResponse({ 
+          success: true, 
+          token, 
+          user: { 
+            ...user, 
+            password: undefined,
+            role: user.role || 'user' // Ensure role is always present
+          },
+          stats: { messages: 0, configs: 0, tickets: 0 },
+          unlockedBadges: []
+        });
       }
 
       // Verify session
@@ -498,7 +516,17 @@ export default {
         if (!userData) return jsonResponse({ error: 'User not found' }, 404);
 
         const user = JSON.parse(userData);
-        return jsonResponse({ success: true, user: { ...user, password: undefined } });
+        // FIXED: Always include role, stats, and badges in response
+        return jsonResponse({ 
+          success: true, 
+          user: { 
+            ...user, 
+            password: undefined,
+            role: user.role || 'user'
+          },
+          stats: { messages: 0, configs: 0, tickets: 0 },
+          unlockedBadges: []
+        });
       }
 
       // ============ USER MANAGEMENT (Admin) ============
@@ -740,21 +768,48 @@ export default {
       }
 
       if (path === '/api/chat/send' && request.method === 'POST') {
-        const { token, message } = await request.json();
-        
-        const session = await env.USERS.get(`session_${token}`);
-        if (!session) return jsonResponse({ error: 'Unauthorized' }, 401);
+        const { token, message, isAdmin, username: adminUsername, adminKey } = await request.json();
 
-        const { username } = JSON.parse(session);
-        
+        if (!message || !message.trim()) {
+          return jsonResponse({ error: 'Message required' }, 400);
+        }
+
+        let sender = null;
+
+        if (isAdmin) {
+          const admin = await verifyAdmin(env, adminUsername, adminKey);
+          if (!admin) return jsonResponse({ error: 'Unauthorized' }, 401);
+
+          sender = {
+            username: admin.username,
+            role: admin.role || 'admin',
+            isAdmin: true
+          };
+        } else {
+          const session = await env.USERS.get(`session_${token}`);
+          if (!session) return jsonResponse({ error: 'Unauthorized' }, 401);
+
+          const { username } = JSON.parse(session);
+          const userData = await env.USERS.get(`user_${username.toLowerCase()}`);
+          const user = userData ? JSON.parse(userData) : null;
+
+          sender = {
+            username,
+            role: user?.role || 'user',
+            isAdmin: false
+          };
+        }
+
         const messagesData = await env.CHAT.get('messages');
         const messages = messagesData ? JSON.parse(messagesData) : [];
         
         const newMessage = {
           id: generateId(),
-          username,
-          message,
-          timestamp: Date.now()
+          username: sender.username,
+          message: message.trim(),
+          timestamp: Date.now(),
+          role: sender.role,
+          isAdmin: sender.isAdmin
         };
 
         messages.push(newMessage);

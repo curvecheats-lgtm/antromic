@@ -19,6 +19,7 @@ export interface User {
   createdAt: number;
   isAdmin: boolean;
   hwid: string | null;
+  role?: string;
 }
 
 export interface Admin {
@@ -33,6 +34,8 @@ export interface ChatMessage {
   username: string;
   message: string;
   timestamp: number;
+  role?: string;
+  isAdmin?: boolean;
 }
 
 export interface Config {
@@ -86,14 +89,34 @@ export interface Stats {
 }
 
 async function fetchApi(endpoint: string, options?: RequestInit) {
-  const res = await fetch(`${API_URL}${endpoint}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-  return res.json();
+  try {
+    const res = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers,
+      },
+    });
+    
+    const data = await res.json();
+    
+    // If response is not ok, throw error with message from API
+    if (!res.ok) {
+      return { 
+        success: false, 
+        error: data.error || `HTTP error ${res.status}` 
+      };
+    }
+    
+    return data;
+  } catch (err) {
+    // Network or parsing error
+    console.error('API fetch error:', err);
+    return { 
+      success: false, 
+      error: 'Failed to connect to server' 
+    };
+  }
 }
 
 // Key APIs
@@ -234,6 +257,12 @@ export const chatApi = {
     fetchApi('/api/chat/send', {
       method: 'POST',
       body: JSON.stringify({ token, message }),
+    }),
+
+  sendAsAdmin: (username: string, adminKey: string, message: string) =>
+    fetchApi('/api/chat/send', {
+      method: 'POST',
+      body: JSON.stringify({ username, adminKey, message, isAdmin: true }),
     }),
 };
 

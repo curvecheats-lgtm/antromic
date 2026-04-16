@@ -91,7 +91,7 @@ export default function AdminLoadersPage() {
     fetchLoaders();
   }, []);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -102,8 +102,28 @@ export default function AdminLoadersPage() {
     }
 
     setSelectedFile(file);
-    // For now, we'll use a placeholder - in production this would upload to storage
-    toast.info('File selected. In production, this would upload to cloud storage.');
+    
+    // Upload file to API
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setDownloadUrl(result.url);
+        toast.success('File uploaded successfully!');
+      } else {
+        toast.error(result.error || 'Failed to upload file');
+      }
+    } catch (error) {
+      toast.error('Failed to upload file');
+    }
   };
 
   const handleOpenEdit = (loader: Loader) => {
@@ -124,14 +144,12 @@ export default function AdminLoadersPage() {
       return;
     }
 
-    // Require file upload
-    if (!selectedFile) {
-      toast.error('Please upload a file (.exe or .zip)');
+    // Require either download URL or file upload
+    let finalDownloadUrl = downloadUrl;
+    if (!finalDownloadUrl) {
+      toast.error('Please provide a download URL or upload a file');
       return;
     }
-
-    // Create placeholder URL - in production upload to cloud storage
-    const finalDownloadUrl = `file://${selectedFile.name}`;
 
     setSaving(true);
     try {
@@ -250,9 +268,21 @@ export default function AdminLoadersPage() {
                   />
                 </div>
 
-                {/* File Upload Only */}
+                {/* Download URL */}
                 <div>
-                  <label className="text-xs uppercase tracking-wider text-muted-foreground">Upload File *</label>
+                  <label className="text-xs uppercase tracking-wider text-muted-foreground">Download URL</label>
+                  <Input
+                    value={downloadUrl}
+                    onChange={(e) => setDownloadUrl(e.target.value)}
+                    placeholder="https://example.com/loader.exe"
+                    className="bg-input mt-1"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">Provide a direct download link for the loader file</p>
+                </div>
+
+                {/* File Upload (Optional) */}
+                <div>
+                  <label className="text-xs uppercase tracking-wider text-muted-foreground">Or Upload File</label>
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -273,7 +303,7 @@ export default function AdminLoadersPage() {
                     ) : (
                       <>
                         <Upload className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
-                        <p className="text-muted-foreground">Click to upload EXE or ZIP</p>
+                        <p className="text-muted-foreground">Click to upload EXE or ZIP (optional)</p>
                         <p className="text-xs text-muted-foreground mt-1">.exe or .zip files only</p>
                       </>
                     )}

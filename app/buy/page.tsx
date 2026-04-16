@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { ArrowLeft, Copy, Check, AlertCircle, Key, Loader2, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Copy, Check, AlertCircle, Key, Loader2, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { PixelRain } from '@/components/pixel-rain';
 import { AnimatedLogo } from '@/components/animated-logo';
 import { paymentApi } from '@/lib/api';
@@ -23,21 +23,24 @@ const RobloxIcon = () => (
 );
 
 const BitcoinIcon = () => (
-  <svg viewBox="0 0 24 24" className="w-8 h-8" fill="currentColor">
-    <path d="M23.638 14.904c-1.602 6.43-8.113 10.34-14.542 8.736C2.67 22.05-1.244 15.525.362 9.105 1.962 2.67 8.475-1.243 14.9.358c6.43 1.605 10.342 8.115 8.738 14.546z"/>
-    <path fill="#fff" d="M14.26 9.598c.596-.314.996-.863.996-1.642 0-1.267-1.012-1.973-2.566-2.085V4.5h-1.05v1.354h-.84V4.5h-1.05v1.37H7.75v.88h.76c.35 0 .47.183.47.44v4.53c0 .31-.148.48-.504.48h-.726v.93l2 .002v1.37h1.05V13.13h.84v1.37h1.05v-1.387c1.774-.107 2.937-.754 2.937-2.307 0-1.097-.65-1.85-1.6-2.108zm-3.46-.354V7.452c.91.036 1.89.116 1.89.896 0 .716-.726.896-1.89.896zm2.236 3.097c0 .814-.91.91-2.236.91v-1.82c1.326 0 2.236.1 2.236.91z"/>
+  <svg viewBox="0 0 32 32" className="w-10 h-10" fill="none">
+    <circle cx="16" cy="16" r="16" fill="#F7931A"/>
+    <path fill="#fff" d="M22.7 14.3c.4-2.7-1.7-4.1-4.4-5.1l.9-3.6-2.2-.6-.9 3.5c-.6-.1-1.2-.3-1.8-.4l.9-3.6-2.2-.6-.9 3.6c-.5-.1-1-.2-1.5-.4l.1-.1-3.1-.8-.6 2.4s1.7.4 1.6.4c.9.2 1.1.8 1.1 1.2l-1.1 4.5c.1 0 .2.1.3.1l-.3-.1-1.6 6.3c-.1.3-.4.8-1 .6.1.1-1.6-.4-1.6-.4l-1.1 2.6 2.9.7c.5.1 1 .3 1.5.4l-.9 3.7 2.2.6.9-3.6c.6.2 1.2.3 1.8.5l-.9 3.5 2.2.6.9-3.7c3.8.7 6.6-.4 7.8-3.1.9-2.4-.1-4.4-2.1-5.5 1.5-.3 2.6-1.2 2.9-3.1zm-5.3 6.7c-.7 2.8-5.4 1.3-7 1l1.2-5c1.5.4 6.4 1.1 5.8 4zm.7-6.8c-.6 2.5-4.5 1.2-5.8 1l1.1-4.6c1.3.3 5.5.9 4.7 3.6z"/>
   </svg>
 );
 
 const EthereumIcon = () => (
-  <svg viewBox="0 0 24 24" className="w-8 h-8" fill="currentColor">
-    <path d="M11.944 17.97L4.58 13.62 11.943 24l7.37-10.38-7.372 4.35h.003zM12.056 0L4.69 12.223l7.365 4.354 7.365-4.35L12.056 0z"/>
+  <svg viewBox="0 0 32 32" className="w-10 h-10" fill="none">
+    <circle cx="16" cy="16" r="16" fill="#627EEA"/>
+    <path fill="#fff" d="M16 6l-7 12 7 4 7-4-7-12zm0 2.5l5.5 10-5.5 3-5.5-3 5.5-10z"/>
+    <path fill="#fff" opacity=".6" d="M16 14.5l-7 3.5 7 4 7-4-7-3.5z"/>
   </svg>
 );
 
 const LitecoinIcon = () => (
-  <svg viewBox="0 0 24 24" className="w-8 h-8" fill="currentColor">
-    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-.385 4.667h2.985c.464 0 .765.318.677.783l-1.4 6.466 1.998-.682-.325 1.499-2.01.666-.818 3.767h6.062c.478 0 .782.316.697.78l-.343 1.595c-.083.453-.522.783-.988.783H6.875l1.146-5.27-2.012.677.338-1.57 2.01-.669 1.628-7.529c.087-.466.527-.796 1.005-.796l-.375-.02z"/>
+  <svg viewBox="0 0 32 32" className="w-10 h-10" fill="none">
+    <circle cx="16" cy="16" r="16" fill="#345D9D"/>
+    <path fill="#fff" d="M10 19.5l1.5-6h9c.8 0 1.3.5 1.1 1.3l-.3 1.2c-.2.6-.7 1-1.3 1h-6l-.5 2h8c.8 0 1.3.5 1.1 1.3l-.3 1.2c-.2.6-.7 1-1.3 1H8.5l1.5-6.5h-2l.5-2h2z"/>
   </svg>
 );
 
@@ -154,23 +157,37 @@ export default function BuyPage() {
   };
 
   const StepIndicator = () => (
-    <div className="flex items-center justify-center gap-4 my-6">
-      {['select', 'pay', 'verify', 'success'].map((s, i) => (
-        <div key={s} className="flex items-center gap-4">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${
-            step === s ? 'bg-[#ff2a2a] text-white' :
-            ['select', 'pay', 'verify', 'success'].indexOf(step) > i ? 'bg-green-500 text-white' :
-            'bg-white/8 text-white/50'
-          }`}>
-            {['select', 'pay', 'verify', 'success'].indexOf(step) > i ? (
-              <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-            ) : (
-              <span className="flex items-center justify-center h-full w-full leading-none">{i + 1}</span>
-            )}
-          </div>
-          {i < 3 && <div className={`h-0.5 w-8 ${['select', 'pay', 'verify', 'success'].indexOf(step) > i ? 'bg-green-500' : 'bg-white/15'}`} />}
-        </div>
-      ))}
+    <div className="my-6 flex items-center justify-center">
+      <div className="flex w-full max-w-md items-center">
+        {['select', 'pay', 'verify', 'success'].map((s, i, steps) => {
+          const currentStepIndex = steps.indexOf(step);
+          const isCompleted = currentStepIndex > i;
+          const isActive = step === s;
+
+          return (
+            <div key={s} className="flex flex-1 items-center">
+              <div className="flex flex-1 justify-center">
+                <div className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-all ${
+                  isActive ? 'bg-[#ff2a2a] text-white' :
+                  isCompleted ? 'bg-green-500 text-white' :
+                  'bg-white/8 text-white/50'
+                }`}>
+                  {isCompleted ? (
+                    <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+                  ) : (
+                    <span className="flex h-full w-full items-center justify-center leading-none">{i + 1}</span>
+                  )}
+                </div>
+              </div>
+              {i < steps.length - 1 && (
+                <div className="flex-1 px-2">
+                  <div className={`h-0.5 w-full ${currentStepIndex > i ? 'bg-green-500' : 'bg-white/15'}`} />
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 
@@ -241,12 +258,16 @@ export default function BuyPage() {
           Back to Login
         </Link>
 
-        <div className="text-center mb-4 animate-fade-in">
-          <AnimatedLogo size="lg" className="mx-auto mb-4" />
-          <h1 className="text-[28px] font-bold text-foreground text-center mb-2">Purchase License</h1>
-          <p className="text-[18px] text-[#ff2a2a] text-center mb-4">
-            {USD_PRICE}
-            <span className="text-sm text-muted-foreground ml-2">/ 30 days</span>
+        <div className="text-center mb-8 animate-fade-in">
+          <img 
+            src="/images/logo-full.png" 
+            alt="Curve.cc" 
+            className="mx-auto mb-4 h-24 w-auto object-contain"
+          />
+          <h1 className="text-2xl font-bold text-foreground mb-2">Purchase License</h1>
+          <p className="text-muted-foreground">
+            <span className="text-primary text-xl font-bold">{USD_PRICE}</span>
+            <span className="text-sm ml-2">/ 30 days</span>
           </p>
         </div>
 
@@ -258,116 +279,79 @@ export default function BuyPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
               <Card
-                className="cursor-pointer transition-all border-red-500/15 hover:border-red-500/40 hover:-translate-y-0.5"
-                style={{
-                  padding: '20px 24px',
-                  borderRadius: '12px',
-                  background: 'rgba(20, 20, 20, 0.85)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '16px'
-                }}
+                className="cursor-pointer hover:border-primary transition-all glass border-border/50 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1"
                 onClick={() => selectMethod('robux')}
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+                <CardContent className="p-6 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-[#3B82F6]/20 flex items-center justify-center text-[#3B82F6] flex-shrink-0">
                     <RobloxIcon />
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <h3 className="text-[16px] font-semibold text-white">Robux</h3>
-                    <p className="text-[13px] text-white/60">{GAMEPASS_PRICE}</p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-foreground">Robux</h3>
+                    <p className="text-sm text-muted-foreground">{GAMEPASS_PRICE}</p>
                   </div>
-                </div>
-                <ArrowRight className="w-6 h-6 text-white/60 flex-shrink-0" />
+                  <ArrowRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                </CardContent>
               </Card>
 
               <Card
-                className="cursor-pointer transition-all border-red-500/15 hover:border-red-500/40 hover:-translate-y-0.5"
-                style={{
-                  padding: '20px 24px',
-                  borderRadius: '12px',
-                  background: 'rgba(20, 20, 20, 0.85)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '16px'
-                }}
+                className="cursor-pointer hover:border-primary transition-all glass border-border/50 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1"
                 onClick={() => selectMethod('btc')}
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+                <CardContent className="p-6 flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-xl bg-[#F7931A]/20 flex items-center justify-center text-[#F7931A] flex-shrink-0">
                     <BitcoinIcon />
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <h3 className="text-[16px] font-semibold text-white">Bitcoin</h3>
-                    <p className="text-[13px] text-white/60">{USD_PRICE} in BTC</p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-foreground">Bitcoin</h3>
+                    <p className="text-sm text-muted-foreground">{USD_PRICE} in BTC</p>
                   </div>
-                </div>
-                <ArrowRight className="w-6 h-6 text-white/60 flex-shrink-0" />
+                  <ArrowRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                </CardContent>
               </Card>
 
               <Card
-                className="cursor-pointer transition-all border-red-500/15 hover:border-red-500/40 hover:-translate-y-0.5"
-                style={{
-                  padding: '20px 24px',
-                  borderRadius: '12px',
-                  background: 'rgba(20, 20, 20, 0.85)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '16px'
-                }}
+                className="cursor-pointer hover:border-primary transition-all glass border-border/50 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1"
                 onClick={() => selectMethod('eth')}
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+                <CardContent className="p-6 flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-xl bg-[#627EEA]/20 flex items-center justify-center text-[#627EEA] flex-shrink-0">
                     <EthereumIcon />
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <h3 className="text-[16px] font-semibold text-white">Ethereum</h3>
-                    <p className="text-[13px] text-white/60">{USD_PRICE} in ETH</p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-foreground">Ethereum</h3>
+                    <p className="text-sm text-muted-foreground">{USD_PRICE} in ETH</p>
                   </div>
-                </div>
-                <ArrowRight className="w-6 h-6 text-white/60 flex-shrink-0" />
+                  <ArrowRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                </CardContent>
               </Card>
 
               <Card
-                className="cursor-pointer transition-all border-red-500/15 hover:border-red-500/40 hover:-translate-y-0.5"
-                style={{
-                  padding: '20px 24px',
-                  borderRadius: '12px',
-                  background: 'rgba(20, 20, 20, 0.85)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '16px'
-                }}
+                className="cursor-pointer hover:border-primary transition-all glass border-border/50 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1"
                 onClick={() => selectMethod('ltc')}
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+                <CardContent className="p-6 flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-xl bg-[#345D9D]/20 flex items-center justify-center text-[#345D9D] flex-shrink-0">
                     <LitecoinIcon />
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <h3 className="text-[16px] font-semibold text-white">Litecoin</h3>
-                    <p className="text-[13px] text-white/60">{USD_PRICE} in LTC</p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-foreground">Litecoin</h3>
+                    <p className="text-sm text-muted-foreground">{USD_PRICE} in LTC</p>
                   </div>
-                </div>
-                <ArrowRight className="w-6 h-6 text-white/60 flex-shrink-0" />
+                  <ArrowRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                </CardContent>
               </Card>
             </div>
 
-            <div className="text-center mt-8">
+            <div className="text-center pt-6">
               <a
                 href="https://discord.gg/aqx7MfHXCJ"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#5865F2]/10 border border-[#5865F2]/30 text-[#8ea1ff] px-5 py-3 rounded-lg transition-all"
-                style={{ fontSize: '14px' }}
+                className="inline-flex items-center justify-center gap-3 bg-[#5865F2]/10 hover:bg-[#5865F2]/20 text-[#5865F2] px-6 py-3 rounded-lg transition-all border border-[#5865F2]/30 hover:scale-105"
               >
-                <DiscordIcon className="w-5 h-5 flex-shrink-0" />
-                <span className="font-medium leading-none">Join our Discord</span>
+                <DiscordIcon className="w-6 h-6 flex-shrink-0" />
+                <span className="font-medium leading-none">Join our Discord for Support</span>
               </a>
             </div>
           </div>
@@ -378,7 +362,7 @@ export default function BuyPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-3">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                  selectedMethod === 'robux' ? 'bg-[#E2231A]/20 text-[#E2231A]' :
+                  selectedMethod === 'robux' ? 'bg-[#3B82F6]/20 text-[#3B82F6]' :
                   selectedMethod === 'btc' ? 'bg-[#F7931A]/20 text-[#F7931A]' :
                   selectedMethod === 'eth' ? 'bg-[#627EEA]/20 text-[#627EEA]' :
                   'bg-[#345D9D]/20 text-[#345D9D]'
@@ -563,16 +547,6 @@ export default function BuyPage() {
         )}
 
         <div className="mt-8 text-center space-y-3">
-          <a
-            href="https://discord.gg/aqx7MfHXCJ"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 bg-[#5865F2]/10 border border-[#5865F2]/30 text-[#8ea1ff] px-5 py-3 rounded-lg transition-all"
-            style={{ fontSize: '14px' }}
-          >
-            <DiscordIcon className="w-5 h-5 flex-shrink-0" />
-            <span className="font-medium leading-none">Need help? Join our Discord</span>
-          </a>
           <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} curve.cc - All rights reserved.</p>
         </div>
       </div>
