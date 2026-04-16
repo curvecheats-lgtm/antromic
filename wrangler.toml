@@ -1,0 +1,36 @@
+name = "curve-api"
+main = "cloudflare-worker/curve-api-deploy.js"
+compatibility_date = "2024-01-15"
+account_id = "7ff398507d6554d7c7817093312d3439"
+
+[[kv_namespaces]]
+binding = "ADMINS"
+id = "3535fb390a544f879d4ffd2079625dfa"
+
+[[kv_namespaces]]
+binding = "CHAT"
+id = "6648056ba8b2411cb719e7d714552068"
+
+[[kv_namespaces]]
+binding = "CONFIGS"
+id = "14ffc706c7304efe8575ba58431f2a31"
+
+[[kv_namespaces]]
+binding = "KEYS"
+id = "14ffc706c7304efe8575ba58431f2a31"
+
+[[kv_namespaces]]
+binding = "LOADERS"
+id = "0fc4376a5b33465c9f7ae045d8103cb5"
+
+[[kv_namespaces]]
+binding = "NEWS"
+id = "be0be1514b934c7abb5ca6bc344d66b6"
+
+[[kv_namespaces]]
+binding = "TICKETS"
+id = "99a73ba6d627498a9a54663a5ee3f491"
+
+[[kv_namespaces]]
+binding = "USERS"
+id = "c9363b5f1b844bf1920fc11cee19a4d2"
