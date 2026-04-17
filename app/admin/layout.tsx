@@ -84,11 +84,11 @@ export default function AdminLayout({
           <Link href="/admin" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <img 
               src="/images/logo-mini.png" 
-              alt="Curve.cc" 
+              alt="Antromic" 
               className="w-8 h-8 object-contain"
             />
             <div>
-              <h2 className="font-bold text-foreground text-sm">Curve.cc</h2>
+              <h2 className="font-bold text-foreground text-sm">Antromic</h2>
               <p className="text-[11px] text-muted-foreground">Admin</p>
             </div>
           </Link>

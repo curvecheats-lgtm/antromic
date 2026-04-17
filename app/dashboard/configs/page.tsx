@@ -24,7 +24,7 @@ import {
 import { toast } from 'sonner';
 import { Plus, Download, User, Clock, Search, Copy, Check, Shield, Rocket, Video, Award, Upload, FileText, RefreshCw, Trash2 } from 'lucide-react';
 
-// Games for Curve.cc
+// Games for Antromic
 const GAMES = [
   { value: 'dahood', label: 'Da Hood' },
   { value: 'datrack', label: 'Da Track' },

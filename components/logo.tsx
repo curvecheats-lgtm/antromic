@@ -66,7 +66,7 @@ export function Logo({ className = '', size = 'md', src }: LogoProps) {
     return (
       <img
         src={imgSrc}
-        alt="Curve.cc"
+        alt="Antromic"
         className={`object-contain ${className}`}
         style={{ width: dim.width, height: dim.height }}
         onError={() => setImgError(true)}
@@ -91,12 +91,10 @@ export function Logo({ className = '', size = 'md', src }: LogoProps) {
             </feMerge>
           </filter>
         </defs>
-        {/* CURVE text */}
-        <text x="10" y="45" fill={`url(#${gradientId})`} fontSize="40" fontWeight="bold" fontFamily="Arial, sans-serif" filter={`url(#${glowId})`}>
-          CURVE
+        {/* ANTROMIC text */}
+        <text x="10" y="45" fill={`url(#${gradientId})`} fontSize="32" fontWeight="bold" fontFamily="Arial, sans-serif" filter={`url(#${glowId})`}>
+          ANTROMIC
         </text>
-        {/* .cc */}
-        <text x="165" y="50" fill="#dc2626" fontSize="20" fontWeight="bold" fontFamily="monospace">.cc</text>
       </svg>
     </div>
   );

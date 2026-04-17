@@ -1,9 +1,9 @@
-# Curve.cc Deployment Guide
+# Antromic Deployment Guide
 
 ## ✅ What Was Created
 
 1. **wrangler.toml** - Cloudflare Worker deployment config with all KV bindings
-2. **cloudflare-worker/curve-api-deploy.js** - Complete backend API code
+2. **cloudflare-worker/antromic-api.js** - Complete backend API code
 3. **deploy-worker.bat** - One-click deploy script for Windows
 4. **env.example** - Environment variables template
 
@@ -25,9 +25,9 @@ This will:
 
 ### Option 2: Copy-Paste (Fastest)
 
-1. Go to https://dash.cloudflare.com/ → Workers & Pages → curve-api
+1. Go to https://dash.cloudflare.com/ → Workers & Pages → antromic-api
 2. Click **Edit Code**
-3. Copy ALL from `cloudflare-worker/curve-api-deploy.js`
+3. Copy ALL from `cloudflare-worker/antromic-api.js`
 4. Paste and click **Deploy**
 
 ### Option 3: Wrangler CLI
@@ -49,7 +49,7 @@ wrangler deploy
 
 1. Create `.env.local` file in project root:
 ```env
-NEXT_PUBLIC_CLOUDFLARE_WORKER_URL=https://curve-api.umiwinsupport.workers.dev
+NEXT_PUBLIC_CLOUDFLARE_WORKER_URL=https://antromic-api.umiwinsupport.workers.dev
 ```
 
 2. Run the frontend:
@@ -66,7 +66,7 @@ npm run dev
 
 ### 1. Get Free Domain
 - Go to https://freenom.com
-- Get `curvecc.tk` or `curvecc.ml` (FREE for 12 months, renewable)
+- Get `antromic.tk` or `antromic.ml` (FREE for 12 months, renewable)
 
 ### 2. Add to Cloudflare
 - Cloudflare Dashboard → Add Site → Enter your domain
@@ -79,13 +79,13 @@ npm run dev
 - Save
 
 ### 4. Add Custom Domain to Worker
-- Workers & Pages → curve-api → Settings → Domains & Routes
-- Add Custom Domain: `api.curvecc.tk`
+- Workers & Pages → antromic-api → Settings → Domains & Routes
+- Add Custom Domain: `api.antromic.tk`
 
 ### 5. Update Frontend
 Change `.env.local`:
 ```env
-NEXT_PUBLIC_CLOUDFLARE_WORKER_URL=https://api.curvecc.tk
+NEXT_PUBLIC_CLOUDFLARE_WORKER_URL=https://api.antromic.tk
 ```
 
 ---
@@ -93,12 +93,8 @@ NEXT_PUBLIC_CLOUDFLARE_WORKER_URL=https://api.curvecc.tk
 ## 🎨 Admin Login Credentials
 
 After deploying, login with:
-- **Username:** `koni`
-- **Password:** `konipassword99`
-
-Or:
-- **Username:** `weird`
-- **Password:** `weirdpassword88`
+- **Username:** `antromicstaff`
+- **Password:** `111222333keys`
 
 ---
 
@@ -107,7 +103,7 @@ Or:
 ```
 b_QcWHObWDFtF/
 ├── cloudflare-worker/
-│   └── curve-api-deploy.js    # Backend API code
+│   └── antromic-api.js    # Backend API code
 ├── wrangler.toml               # Worker deployment config
 ├── deploy-worker.bat           # One-click deploy script
 ├── env.example                 # Environment template
@@ -135,7 +131,7 @@ b_QcWHObWDFtF/
 
 ## 🎉 Done!
 
-Your Curve.cc platform should now be fully working with:
+Your Antromic platform should now be fully working with:
 - ✅ License key system
 - ✅ User authentication
 - ✅ Admin panel

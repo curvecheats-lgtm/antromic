@@ -1,4 +1,4 @@
-const API_URL = (process.env.NEXT_PUBLIC_CLOUDFLARE_WORKER_URL || 'https://curve-api.umiwinsupport.workers.dev').replace(/\/$/, '');
+const API_URL = (process.env.NEXT_PUBLIC_CLOUDFLARE_WORKER_URL || 'https://antromic-api.umiwinsupport.workers.dev').replace(/\/$/, '');
 
 export interface Key {
   key: string;

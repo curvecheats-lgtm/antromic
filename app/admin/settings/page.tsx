@@ -39,11 +39,11 @@ export default function SettingsPage() {
   const { adminKey, adminUsername } = useAuth();
   
   // General Settings
-  const [siteName, setSiteName] = useState('Curve.cc');
-  const [siteUrl, setSiteUrl] = useState('https://curve.cc');
+  const [siteName, setSiteName] = useState('Antromic');
+  const [siteUrl, setSiteUrl] = useState('https://antromic.cc');
   const [maintenanceMode, setMaintenanceMode] = useState(false);
   const [registrationOpen, setRegistrationOpen] = useState(true);
-  const [welcomeMessage, setWelcomeMessage] = useState('Welcome to Curve.cc - The best gaming enhancement platform.');
+  const [welcomeMessage, setWelcomeMessage] = useState('Welcome to Antromic - The best gaming enhancement platform.');
   
   // Security Settings
   const [maxLoginAttempts, setMaxLoginAttempts] = useState('5');
@@ -52,14 +52,14 @@ export default function SettingsPage() {
   const [twoFactorRequired, setTwoFactorRequired] = useState(false);
   
   // API Settings
-  const [cfWorkerUrl, setCfWorkerUrl] = useState('https://curve-api.umiwinsupport.workers.dev');
+  const [cfWorkerUrl, setCfWorkerUrl] = useState('https://antromic-api.umiwinsupport.workers.dev');
   const [apiRateLimit, setApiRateLimit] = useState('100');
   const [webhookUrl, setWebhookUrl] = useState('');
   const [discordWebhook, setDiscordWebhook] = useState('');
   
   // Key Settings
   const [defaultKeyDuration, setDefaultKeyDuration] = useState('30');
-  const [keyPrefix, setKeyPrefix] = useState('CURVE');
+  const [keyPrefix, setKeyPrefix] = useState('ANT');
   const [allowKeyTransfer, setAllowKeyTransfer] = useState(false);
   const [autoExpireNotification, setAutoExpireNotification] = useState(true);
   
@@ -107,7 +107,7 @@ export default function SettingsPage() {
   const handleSave = async () => {
     setSaving(true);
     // Settings are stored locally for now
-    localStorage.setItem('curve_settings', JSON.stringify({
+    localStorage.setItem('antromic_settings', JSON.stringify({
       siteName,
       siteUrl,
       maintenanceMode,

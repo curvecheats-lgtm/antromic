@@ -13,7 +13,7 @@ const minecraftia = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Curve.cc - Premium Software',
+  title: 'Antromic - Premium Software',
   description: 'Premium software licensing and authentication system',
   icons: {
     icon: '/images/logo-mini.png',

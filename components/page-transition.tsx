@@ -25,7 +25,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-sm animate-fade-in">
           <div className="flex flex-col items-center gap-3">
-            <p className="text-foreground text-lg font-medium tracking-wide">loading curve.cc</p>
+            <p className="text-foreground text-lg font-medium tracking-wide">loading antromic</p>
             <Spinner className="w-5 h-5 text-primary" />
           </div>
         </div>
@@ -44,7 +44,7 @@ export function LoadingScreen() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="flex flex-col items-center gap-4 animate-fade-in">
-        <p className="text-foreground text-lg font-medium tracking-wide">loading curve.cc</p>
+        <p className="text-foreground text-lg font-medium tracking-wide">loading antromic</p>
         <Spinner className="w-6 h-6 text-primary" />
       </div>
     </div>

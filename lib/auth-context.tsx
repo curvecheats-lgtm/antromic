@@ -34,8 +34,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [adminSession, setAdminSessionState] = useState<AdminSession | null>(null);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('curve_token');
-    const storedAdminSession = localStorage.getItem('curve_admin_session');
+    const storedToken = localStorage.getItem('antromic_token');
+    const storedAdminSession = localStorage.getItem('antromic_admin_session');
     
     if (storedAdminSession) {
       try {
@@ -45,13 +45,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (res.success) {
             setAdminSessionState(session);
           } else {
-            localStorage.removeItem('curve_admin_session');
+            localStorage.removeItem('antromic_admin_session');
           }
         }).catch(() => {
-          localStorage.removeItem('curve_admin_session');
+          localStorage.removeItem('antromic_admin_session');
         });
       } catch {
-        localStorage.removeItem('curve_admin_session');
+        localStorage.removeItem('antromic_admin_session');
       }
     }
 
@@ -61,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(res.user);
           setToken(storedToken);
         } else {
-          localStorage.removeItem('curve_token');
+          localStorage.removeItem('antromic_token');
         }
         setIsLoading(false);
       }).catch(() => {
@@ -78,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (res.success) {
         setUser(res.user);
         setToken(res.token);
-        localStorage.setItem('curve_token', res.token);
+        localStorage.setItem('antromic_token', res.token);
         return { success: true };
       }
       return { success: false, error: res.error };
@@ -102,7 +102,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem('curve_token');
+    localStorage.removeItem('antromic_token');
   }, []);
 
   const adminLogin = useCallback(async (username: string, password: string) => {
@@ -116,7 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           role: res.role
         };
         setAdminSessionState(session);
-        localStorage.setItem('curve_admin_session', JSON.stringify(session));
+        localStorage.setItem('antromic_admin_session', JSON.stringify(session));
         return { success: true };
       }
       return { success: false, error: res.error || 'Invalid credentials' };
@@ -128,15 +128,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const adminLogout = useCallback(() => {
     setAdminSessionState(null);
-    localStorage.removeItem('curve_admin_session');
+    localStorage.removeItem('antromic_admin_session');
   }, []);
 
   const setAdminSession = useCallback((session: AdminSession | null) => {
     setAdminSessionState(session);
     if (session) {
-      localStorage.setItem('curve_admin_session', JSON.stringify(session));
+      localStorage.setItem('antromic_admin_session', JSON.stringify(session));
     } else {
-      localStorage.removeItem('curve_admin_session');
+      localStorage.removeItem('antromic_admin_session');
     }
   }, []);
 

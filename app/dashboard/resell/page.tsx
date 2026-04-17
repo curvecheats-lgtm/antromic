@@ -13,7 +13,7 @@ export default function ResellPage() {
           <ShoppingBag className="w-6 h-6 text-primary" />
           Resell Program
         </h1>
-        <p className="text-muted-foreground">Become a Curve.cc reseller</p>
+        <p className="text-muted-foreground">Become an Antromic reseller</p>
       </div>
 
       {/* Coming Soon Card */}

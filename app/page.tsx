@@ -26,7 +26,7 @@ export default function Home() {
       <div className="flex flex-col items-center gap-4">
         <img
           src="/images/logo.webp"
-          alt="Curve.cc"
+          alt="Antromic"
           className="w-32 h-auto"
         />
         <Spinner className="w-8 h-8 text-primary" />

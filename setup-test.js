@@ -1,7 +1,7 @@
 // Setup script to create test account and key
 // Run this with: node setup-test.js
 
-const API_URL = 'https://curve-api.umiwinsupport.workers.dev';
+const API_URL = 'https://antromic-api.umiwinsupport.workers.dev';
 
 async function setup() {
   try {
@@ -11,7 +11,7 @@ async function setup() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        setupKey: 'curve-setup-2025'
+        setupKey: 'antromic-setup-2025'
       }),
     });
 

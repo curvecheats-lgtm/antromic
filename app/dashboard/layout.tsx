@@ -104,7 +104,7 @@ export default function DashboardLayout({
           <Link href="/dashboard" className="flex justify-center">
             <img 
               src="/images/logo-mini.png" 
-              alt="Curve.cc" 
+              alt="Antromic" 
               className="w-20 h-12 object-contain hover:opacity-80 transition-opacity cursor-pointer"
             />
           </Link>

@@ -5,12 +5,12 @@
   "installCommand": "npm install",
   "framework": "nextjs",
   "env": {
-    "NEXT_PUBLIC_CLOUDFLARE_WORKER_URL": "https://curve-api.umiwinsupport.workers.dev"
+    "NEXT_PUBLIC_CLOUDFLARE_WORKER_URL": "https://antromic-api.umiwinsupport.workers.dev"
   },
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://curve-api.umiwinsupport.workers.dev/api/:path*"
+      "destination": "https://antromic-api.umiwinsupport.workers.dev/api/:path*"
     }
   ],
   "headers": [

@@ -75,7 +75,7 @@ export default function LoginPage() {
             <div className="flex flex-col items-center mb-8">
               <img 
                 src="/images/logo-full.png" 
-                alt="Curve.cc" 
+                alt="Antromic" 
                 className="mb-4 h-24 w-auto object-contain"
               />
               <p className="text-xs text-muted-foreground uppercase tracking-widest animate-fade-in">Premium Software</p>
@@ -262,7 +262,7 @@ export default function LoginPage() {
 
           <div className="mt-8 pt-6 border-t border-border/50 text-center">
             <p className="text-xs text-muted-foreground">
-              &copy; {new Date().getFullYear()} curve.cc - All rights reserved.
+              &copy; {new Date().getFullYear()} Antromic - All rights reserved.
             </p>
           </div>
         </CardContent>

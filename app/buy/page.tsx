@@ -261,7 +261,7 @@ export default function BuyPage() {
         <div className="text-center mb-8 animate-fade-in">
           <img 
             src="/images/logo-full.png" 
-            alt="Curve.cc" 
+            alt="Antromic" 
             className="mx-auto mb-4 h-24 w-auto object-contain"
           />
           <h1 className="text-2xl font-bold text-foreground mb-2">Purchase License</h1>
@@ -547,7 +547,7 @@ export default function BuyPage() {
         )}
 
         <div className="mt-8 text-center space-y-3">
-          <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} curve.cc - All rights reserved.</p>
+          <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Antromic - All rights reserved.</p>
         </div>
       </div>
     </main>

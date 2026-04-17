@@ -244,8 +244,8 @@ export const RESERVED_USERNAMES = [
   'support',
   'help',
   'official',
-  'curve',
-  'curvecc',
+  'antromic',
+  'antromiccc',
   'system',
   'bot',
 ];
@@ -269,7 +269,7 @@ export const BADGES: Record<BadgeKey, BadgeConfig> = {
   og: {
     icon: Star,
     label: 'OG',
-    description: 'Early supporter of Curve.cc',
+    description: 'Early supporter of Antromic',
     color: 'text-yellow-400',
     bgColor: 'bg-yellow-500/20',
   },
